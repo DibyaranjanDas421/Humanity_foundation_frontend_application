@@ -1,0 +1,64 @@
+/* styles.css */
+.center-text {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  .card-deck {
+    display: flex;
+    justify-content: space-between; /* Distribute cards evenly */
+    flex-wrap: wrap; /* Allow wrapping of cards to the next line if necessary */
+    gap: 10px; /* Space between cards */
+    margin-top: 1.2rem;
+  }
+  
+  .card {
+    margin: 3rem;
+    width: 50%; /* Each card takes up 50% of the container's width */
+    max-width: 400px; /* Max width of each card */
+    flex: 1; /* Make cards flexible */
+    margin-bottom: 20px; /* Optional: add some spacing between the cards vertically */
+    display: flex; /* Make card a flex container */
+    flex-direction: column; /* Stack the content vertically */
+    align-items: center; /* Center all the content horizontally */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */
+  }
+  
+  .card:hover {
+    transform: translateY(-10px); /* Lift the card slightly */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow to the card */
+  }
+  
+  .card-img-top {
+    width: 10rem; /* Fixed width for image */
+    height: 10rem; /* Fixed height for image */
+    object-fit: cover; /* Ensure the image covers the space while maintaining the aspect ratio */
+    margin-bottom: 15px; /* Add some space below the image */
+    border-radius: 20%; /* Rounded corners for the image */
+    margin-top: 1rem;
+    transition: transform 0.3s ease; /* Smooth transition for image on hover */
+  }
+  
+  .card:hover .card-img-top {
+    transform: scale(1.1); /* Slightly zoom the image on hover */
+  }
+  
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center; /* Align text to center */
+  }
+  
+  .card-footer {
+    text-align: center; /* Center footer text */
+  }
+.head{
+    text-align: center; /* Centers the text horizontally */
+    margin-top: 5rem; /* Ensures a top margin of 5rem */
+    margin-left: 0; /* Removes any left margin */
+    margin-right: 0; /* Ensures no right margin */
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color:red;
+}  
+

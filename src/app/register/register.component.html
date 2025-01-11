@@ -1,0 +1,205 @@
+<div class="container d-flex justify-content-center align-items-center mt-4 mb-4 animate-form" style="min-height: 80vh;">
+  <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" novalidate >
+    <h3 class="text-center">Register as a Donor</h3>
+    
+    <!-- Full Name and Blood Group -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="fullName" class="form-label">Full Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="fullName"
+          name="fullName"
+          [(ngModel)]="model.fullName"
+          required
+          #fullName="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && fullName.invalid }"
+          placeholder="Full Name"
+        />
+        <div class="invalid-feedback">Full Name is required.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="bloodGroup" class="form-label">Blood Group</label>
+        <select
+          id="bloodGroup"
+          class="form-control"
+          name="bloodGroup"
+          [(ngModel)]="model.bloodGroup"
+          required
+          #bloodGroup="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && bloodGroup.invalid }"
+        >
+          <option value="" disabled selected>Choose...</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+        <div class="invalid-feedback">Please select a blood group.</div>
+      </div>
+    </div>
+
+    <!-- User ID (New Field) -->
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label for="userId" class="form-label">User ID</label>
+        <input
+          type="text"
+          class="form-control"
+          id="userId"
+          name="userId"
+          [(ngModel)]="model.userId"
+          required
+          #userId="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && userId.invalid }"
+          placeholder="User ID"
+        />
+        <div class="invalid-feedback">User ID is required.</div>
+      </div>
+    </div>
+
+    <!-- Mobile Number and Email ID -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="mobileNumber" class="form-label">Mobile Number</label>
+        <input
+          type="text"
+          class="form-control"
+          id="mobileNumber"
+          name="mobileNumber"
+          [(ngModel)]="model.mobileNumber"
+          required
+          #mobileNumber="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && mobileNumber.invalid }"
+          placeholder="Mobile Number"
+        />
+        <div class="invalid-feedback">Mobile Number is required.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="emailId" class="form-label">Email ID</label>
+        <input
+          type="email"
+          class="form-control"
+          id="emailId"
+          name="emailId"
+          [(ngModel)]="model.emailId"
+          required
+          email
+          #emailId="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && emailId.invalid }"
+          placeholder="Email"
+        />
+        <div class="invalid-feedback">Please provide a valid email address.</div>
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          [(ngModel)]="model.password"
+          required
+          #password="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && password.invalid }"
+          placeholder="Password"
+        />
+        <div class="invalid-feedback">Password is required.</div>
+      </div>
+    </div>
+
+    <!-- Country and State -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="country" class="form-label">Country</label>
+        <input
+          type="text"
+          class="form-control"
+          id="country"
+          name="country"
+          [(ngModel)]="model.country"
+          required
+          #country="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && country.invalid }"
+          placeholder="Country"
+        />
+        <div class="invalid-feedback">Country is required.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="state" class="form-label">State</label>
+        <input
+          type="text"
+          class="form-control"
+          id="state"
+          name="state"
+          [(ngModel)]="model.state"
+          required
+          #state="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && state.invalid }"
+          placeholder="State"
+        />
+        <div class="invalid-feedback">State is required.</div>
+      </div>
+    </div>
+
+    <!-- District and City -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="district" class="form-label">District</label>
+        <input
+          type="text"
+          class="form-control"
+          id="district"
+          name="district"
+          [(ngModel)]="model.district"
+          required
+          #district="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && district.invalid }"
+          placeholder="District"
+        />
+        <div class="invalid-feedback">District is required.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="city" class="form-label">City</label>
+        <input
+          type="text"
+          class="form-control"
+          id="city"
+          name="city"
+          [(ngModel)]="model.city"
+          required
+          #city="ngModel"
+          [ngClass]="{ 'is-invalid': registerForm.submitted && city.invalid }"
+          placeholder="City"
+        />
+        <div class="invalid-feedback">City is required.</div>
+      </div>
+    </div>
+
+    <!-- Availability to Donate Blood -->
+    <div class="form-check mb-3">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="availabilityToDonateBlood"
+        name="availabilityToDonateBlood"
+        [(ngModel)]="model.availabilityToDonateBlood"
+      />
+      <label class="form-check-label" for="availabilityToDonateBlood">
+        Available to Donate Blood
+      </label>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary w-100 btn-hover">Submit</button>
+  </form>
+</div>

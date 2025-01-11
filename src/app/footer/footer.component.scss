@@ -1,0 +1,24 @@
+.img{
+    height: 9.5rem;
+    width: 9.5rem;
+}
+/* Remove underline from all anchor tags */
+a {
+    text-decoration: none;
+  }
+  
+  /* Add right margin to the unordered list */
+  ul.navbar-nav {
+    margin-right: 20px; /* Adjust the value as needed */
+  }
+  a {
+    text-decoration: none !important;
+  }
+  
+  ul.navbar-nav {
+    margin-right: 20px !important;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+      

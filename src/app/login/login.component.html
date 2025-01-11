@@ -1,0 +1,43 @@
+<div class="container d-flex justify-content-center align-items-center mt-4 mb-4" style="min-height: 80vh;">
+    <div class="card shadow p-4 animate-form" style="width: 100%; max-width: 600px; border-radius: 15px;">
+      <h3 class="text-center mb-4">Login</h3>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+        <!-- User ID -->
+        <div class="mb-3">
+          <label for="userId" class="form-label">User ID</label>
+          <input
+            type="text"
+            class="form-control"
+            id="userId"
+            formControlName="userId"
+            placeholder="Enter your User ID"
+            [ngClass]="{ 'is-invalid': loginForm?.get('userId')?.touched && loginForm?.get('userId')?.invalid }"
+          />
+          <div class="invalid-feedback">
+            Please enter your User ID.
+          </div>
+        </div>
+  
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            formControlName="password"
+            placeholder="Enter your Password"
+            [ngClass]="{ 'is-invalid': loginForm?.get('password')?.touched && loginForm?.get('password')?.invalid }"
+          />
+          <div class="invalid-feedback">
+            Please enter your Password.
+          </div>
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-100 btn-hover" [disabled]="loginForm?.invalid">Login</button>
+      </form>
+    </div>
+   
+  </div>
+  

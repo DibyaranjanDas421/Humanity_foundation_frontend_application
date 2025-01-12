@@ -1,47 +1,51 @@
 <div *ngIf="receiverData?.length > 0; else loading" class="receiver-request-container">
-    <h1 class="receiver-request-title">Receiver Request</h1>
-  
-    <div class="receiver-info">
-      <h2 class="receiver-info-title">Receiver Information</h2>
-  
-      <div class="receiver-info-item">
-        <p><strong>Full Name:</strong> {{ receiverData[0]?.userRequest?.receiver?.fullName }}</p>
-      </div>
-      <div class="receiver-info-item">
-        <p><strong>Blood Group:</strong> {{ receiverData[0]?.userRequest?.receiver?.bloodGroup }}</p>
-      </div>
-      <div class="receiver-info-item">
-        <p><strong>Mobile Number:</strong> {{ receiverData[0]?.userRequest?.receiver?.mobileNumber }}</p>
-      </div>
-      <div class="receiver-info-item">
-        <p><strong>Email:</strong> {{ receiverData[0]?.userRequest?.receiver?.emailId }}</p>
-      </div>
-      <div class="receiver-info-item">
-        <p><strong>City:</strong> {{ receiverData[0]?.userRequest?.receiver?.city }}</p>
-      </div>
-      <div class="receiver-info-item">
-        <p><strong>State:</strong> {{ receiverData[0]?.userRequest?.receiver?.state }}</p>
-      </div>
-      <div class="receiver-info-item">
-        <p><strong>Country:</strong> {{ receiverData[0]?.userRequest?.receiver?.country }}</p>
-      </div>
-  
-      <!-- Display Receiver Image -->
-      <div class="receiver-image">
-        <p><strong>Receiver Image:</strong></p>
-        <img 
-          *ngIf="receiverData[0]?.userRequest?.fileUrl" 
-          [src]="receiverData[0]?.userRequest?.fileUrl" 
-          alt="Receiver Image" 
-          class="receiver-img"
-        />
-      </div>
+  <h1 class="receiver-request-title">Receiver Request</h1>
+
+  <div class="receiver-info" *ngFor="let request of receiverData">
+    <h2 class="receiver-info-title">Receiver Information</h2>
+
+    <div class="receiver-info-item">
+      <p><strong>Full Name:</strong> {{ request?.userRequest?.receiver?.fullName }}</p>
+    </div>
+    <div class="receiver-info-item">
+      <p><strong>Blood Group:</strong> {{ request?.userRequest?.receiver?.bloodGroup }}</p>
+    </div>
+    <div class="receiver-info-item">
+      <p><strong>Mobile Number:</strong> {{ request?.userRequest?.receiver?.mobileNumber }}</p>
+    </div>
+    <div class="receiver-info-item">
+      <p><strong>Email:</strong> {{ request?.userRequest?.receiver?.emailId }}</p>
+    </div>
+    <div class="receiver-info-item">
+      <p><strong>City:</strong> {{ request?.userRequest?.receiver?.city }}</p>
+    </div>
+    <div class="receiver-info-item">
+      <p><strong>State:</strong> {{ request?.userRequest?.receiver?.state }}</p>
+    </div>
+    <div class="receiver-info-item">
+      <p><strong>Country:</strong> {{ request?.userRequest?.receiver?.country }}</p>
+    </div>
+    
+    <!-- Displaying Hospital Name -->
+    <div class="receiver-info-item">
+      <p><strong>Hospital Name:</strong> {{ request?.userRequest?.hospitalName }}</p>
+    </div>
+
+    <div class="receiver-image">
+      <p><strong>Receiver Image:</strong></p>
+      <img *ngIf="request?.userRequest?.fileUrl" [src]="request?.userRequest?.fileUrl" alt="Receiver Image" class="receiver-img" />
+    </div>
+    
+    <!-- Accept/Reject Buttons -->
+    <div class="response-buttons">
+      <button (click)="respondToRequest(request?.id, 'ACCEPT')" class="btn accept-btn">Accept</button>
+      <button (click)="respondToRequest(request?.id, 'REJECT')" class="btn reject-btn">Reject</button>
     </div>
   </div>
-  
-  <ng-template #loading>
-    <div class="loading-container">
-      <p class="loading-text">Loading receiver request data...</p>
-    </div>
-  </ng-template>
-  
+</div>
+
+<ng-template #loading>
+  <div class="loading-container">
+    <p class="loading-text">Loading receiver request data...</p>
+  </div>
+</ng-template>

@@ -20,14 +20,11 @@ export class ReciverRequestComponent implements OnInit {
     private cookieService: CookieService,
     private tokenService: TokenService,
     private router: Router,
-    private authService :AuthService
-    
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    // Get donorId from cookies (assuming donorId is stored in cookies)
     this.donorId = this.authService.getId();
-    console.log(this.donorId);
     if (this.donorId) {
       this.fetchReceiverRequestData();
     } else {
@@ -50,11 +47,8 @@ export class ReciverRequestComponent implements OnInit {
 
     this.reciverRequestService.getReceiverRequest(this.donorId).subscribe(
       (response) => {
-        // Make sure response is an array and log the response
-        console.log('API Response:', response);
         if (Array.isArray(response) && response.length > 0) {
           this.receiverData = response;
-          console.log('Receiver Data:', this.receiverData);
         } else {
           Swal.fire({
             title: 'Error',
@@ -65,15 +59,56 @@ export class ReciverRequestComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Error fetching receiver data:', error);
         Swal.fire({
           title: 'Error',
-          text: 'There was an issue with fetching the data. Please try again later.',
+          text: 'There was an issue fetching the data.',
           icon: 'error',
           confirmButtonText: 'OK',
         });
       }
     );
-}
-
+  }
+  
+  respondToRequest(donorReceiverStatusId: number, action: string): void {
+    console.log('Action:', action); // Log the action before sending
+  
+    // Ensure the response is in uppercase form before sending
+    const response = action === 'ACCEPT' ? 'ACCEPT' : 'REJECT';
+  
+    // Check if donorId and reciverRequestService are valid (non-null)
+    if (!this.donorId) {
+      console.error('Donor ID is missing.');
+      return; // Early exit if donorId is invalid
+    }
+  
+    if (!this.reciverRequestService) {
+      console.error('Receiver Request Service is missing.');
+      return; // Early exit if reciverRequestService is invalid
+    }
+  
+    // Now proceed with making the PUT request to the backend
+    this.reciverRequestService.respondToRequest(+this.donorId, donorReceiverStatusId, response).subscribe(
+      (result) => {
+        Swal.fire({
+          title: 'Success',
+          text: `Request has been ${response.toLowerCase()} successfully.`,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+  
+        // Refresh the receiver data to reflect the updated state
+        this.fetchReceiverRequestData();
+      },
+      (error) => {
+        console.error('Error responding to request:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to respond to the request. Please try again.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
+    );
+  }
+  
 }

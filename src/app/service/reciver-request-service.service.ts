@@ -23,27 +23,55 @@ export class ReciverRequestService {
    */
   getReceiverRequest(donorId: string): Observable<any> {
     return new Observable((observer) => {
-      // Get the access token
       this.tokenService.getAccessToken().subscribe(
         (response) => {
           const token = response.access_token;
 
-          // Set the Authorization header with the token
           const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-          // Make the GET request with the donorId appended to the URL
           this.http.get(`${this.apiUrl}${donorId}`, { headers }).subscribe(
             (apiResponse) => {
-              observer.next(apiResponse); // Success
+              observer.next(apiResponse);
               observer.complete();
             },
             (error) => {
-              observer.error(error); // Error
+              observer.error(error);
             }
           );
         },
         (error) => {
-          observer.error(error); // Token retrieval error
+          observer.error(error);
+        }
+      );
+    });
+  }
+
+  respondToRequest(donorId: number, donorReceiverStatusId: number, response: string): Observable<any> {
+    return new Observable((observer) => {
+      this.tokenService.getAccessToken().subscribe(
+        (responseData) => {
+          const token = responseData.access_token;
+
+          const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+          const apiUrl = `http://localhost:8080/donors/${donorId}/respond/${donorReceiverStatusId}`;
+
+          const requestBody = { response };
+
+          console.log(response);
+
+          this.http.put(apiUrl, requestBody, { headers }).subscribe(
+            (apiResponse) => {
+              observer.next(apiResponse);
+              observer.complete();
+            },
+            (error) => {
+              observer.error(error);
+            }
+          );
+        },
+        (error) => {
+          observer.error(error);
         }
       );
     });

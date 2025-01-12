@@ -83,4 +83,79 @@
   .loading-text {
     font-style: italic;
   }
+  .response-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  
+  .accept-btn {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .accept-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+  
+  .reject-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .reject-btn:hover {
+    background-color: #e53935;
+    transform: scale(1.05);
+  }
+/* Center the container that holds the buttons */
+.response-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Space between the buttons */
+  margin-top: 20px;
+}
+
+/* Button Styles */
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.accept-btn {
+  background-color: green;
+  color: white;
+}
+
+.reject-btn {
+  background-color: red;
+  color: white;
+}
+
+/* Style for the receiver info */
+.receiver-info-item p {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+/* Receiver info container */
+.receiver-info {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 20px;
+}
+  
   

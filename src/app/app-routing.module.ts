@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { BloodRequestComponent } from './blood-request/blood-request.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import {DonorSearchComponentComponent} from './donor-search-component/donor-search-component.component'
 
 import { AuthGuard } from './guards/auth.guard';  // Import AuthGuard
 import { NoAuthGuard } from './guards/no-auth.guard';  // Import NoAuthGuard
@@ -20,9 +21,12 @@ const routes: Routes = [
   // Routes accessible only if user is not logged in (protected with NoAuthGuard)
   { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
+  { path: 'blood-request', component: BloodRequestComponent, canActivate: [AuthGuard] },
+
+  { path: 'donor-search', component: DonorSearchComponentComponent, canActivate: [AuthGuard] }, 
 
   // Routes accessible only if user is logged in (protected with AuthGuard)
-  { path: 'blood-request', component: BloodRequestComponent, canActivate: [AuthGuard] },
+
 
   // Other public routes
   { path: 'about-us', component: AboutUsComponent },

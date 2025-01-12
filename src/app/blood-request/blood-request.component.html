@@ -1,135 +1,122 @@
 <div class="container d-flex justify-content-center align-items-center mt-4 mb-4" style="min-height: 80vh;">
-    <div class="card shadow p-4 animate-form" style="width: 100%; max-width: 600px; border-radius: 15px;">
-      <h3 class="text-center mb-4">Register</h3>
-      <form action="/your-server-endpoint" method="post" enctype="multipart/form-data">
-        <!-- File Upload -->
-        <div class="mb-3">
-          <label for="file" class="form-label">Upload File</label>
-          <input
-            type="file"
-            class="form-control"
-            id="file"
-            name="file"
-            required
-            accept="image/*,application/pdf"
-          />
-        </div>
-  
-        <!-- Full Name -->
-        <div class="mb-3">
-          <label for="fullName" class="form-label">Full Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="fullName"
-            name="fullName"
-            required
-            placeholder="Full Name"
-          />
-        </div>
-  
-        <!-- Blood Group -->
-        <div class="mb-3">
-          <label for="bloodGroup" class="form-label">Blood Group</label>
-          <select
-            id="bloodGroup"
-            class="form-control"
-            name="bloodGroup"
-            required
-          >
-            <option value="" disabled selected>Choose...</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-        </div>
-  
-        <!-- Mobile Number -->
-        <div class="mb-3">
-          <label for="mobileNumber" class="form-label">Mobile Number</label>
-          <input
-            type="text"
-            class="form-control"
-            id="mobileNumber"
-            name="mobileNumber"
-            required
-            placeholder="Mobile Number"
-          />
-        </div>
-  
-        <!-- Country -->
-        <div class="mb-3">
-          <label for="country" class="form-label">Country</label>
-          <input
-            type="text"
-            class="form-control"
-            id="country"
-            name="country"
-            required
-            placeholder="Country"
-          />
-        </div>
-  
-        <!-- State -->
-        <div class="mb-3">
-          <label for="state" class="form-label">State</label>
-          <input
-            type="text"
-            class="form-control"
-            id="state"
-            name="state"
-            required
-            placeholder="State"
-          />
-        </div>
-  
-        <!-- District -->
-        <div class="mb-3">
-          <label for="district" class="form-label">District</label>
-          <input
-            type="text"
-            class="form-control"
-            id="district"
-            name="district"
-            required
-            placeholder="District"
-          />
-        </div>
-  
-        <!-- City -->
-        <div class="mb-3">
-          <label for="city" class="form-label">City</label>
-          <input
-            type="text"
-            class="form-control"
-            id="city"
-            name="city"
-            required
-            placeholder="City"
-          />
-        </div>
-  
-        <!-- Hospital Name -->
-        <div class="mb-3">
-          <label for="hospitalName" class="form-label">Hospital Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="hospitalName"
-            name="hospitalName"
-            required
-            placeholder="Hospital Name"
-          />
-        </div>
-  
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary w-100 btn-hover">Submit</button>
-      </form>
-    </div>
+  <div class="card shadow p-4 animate-form" style="width: 100%; max-width: 600px; border-radius: 15px;">
+    <h3 class="text-center mb-4">BloodRequest</h3>
+    <form [formGroup]="bloodRequestForm" (ngSubmit)="onSubmit()">
+      <!-- File Upload -->
+      <div class="mb-3">
+        <label for="file" class="form-label">Upload File</label>
+        <input
+          type="file"
+          class="form-control"
+          id="file"
+          (change)="onFileChange($event)"
+          required
+          accept="image/*,application/pdf"
+        />
+      </div>
+
+      <!-- Full Name -->
+      <div class="mb-3">
+        <label for="fullName" class="form-label">Full Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="fullName"
+          formControlName="fullName"
+          placeholder="Full Name"
+        />
+      </div>
+
+      <!-- Blood Group -->
+      <div class="mb-3">
+        <label for="bloodGroup" class="form-label">Blood Group</label>
+        <select id="bloodGroup" class="form-control" formControlName="bloodGroup" required>
+          <option value="" disabled selected>Choose...</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+      </div>
+
+      <!-- Mobile Number -->
+      <div class="mb-3">
+        <label for="mobileNumber" class="form-label">Mobile Number</label>
+        <input
+          type="text"
+          class="form-control"
+          id="mobileNumber"
+          formControlName="mobileNumber"
+          placeholder="Mobile Number"
+        />
+      </div>
+
+      <!-- Country -->
+      <div class="mb-3">
+        <label for="country" class="form-label">Country</label>
+        <input
+          type="text"
+          class="form-control"
+          id="country"
+          formControlName="country"
+          placeholder="Country"
+        />
+      </div>
+
+      <!-- State -->
+      <div class="mb-3">
+        <label for="state" class="form-label">State</label>
+        <input
+          type="text"
+          class="form-control"
+          id="state"
+          formControlName="state"
+          placeholder="State"
+        />
+      </div>
+
+      <!-- District -->
+      <div class="mb-3">
+        <label for="district" class="form-label">District</label>
+        <input
+          type="text"
+          class="form-control"
+          id="district"
+          formControlName="district"
+          placeholder="District"
+        />
+      </div>
+
+      <!-- City -->
+      <div class="mb-3">
+        <label for="city" class="form-label">City</label>
+        <input
+          type="text"
+          class="form-control"
+          id="city"
+          formControlName="city"
+          placeholder="City"
+        />
+      </div>
+
+      <!-- Hospital Name -->
+      <div class="mb-3">
+        <label for="hospitalName" class="form-label">Hospital Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="hospitalName"
+          formControlName="hospitalName"
+          placeholder="Hospital Name"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary w-100 btn-hover" [disabled]="bloodRequestForm.invalid">Submit</button>
+    </form>
   </div>
-  
+</div>

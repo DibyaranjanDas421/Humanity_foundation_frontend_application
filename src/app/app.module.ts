@@ -14,6 +14,8 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 import { MessageComponent } from './message/message.component';
 import { FooterComponent } from './footer/footer.component';
 import { KeycloakAngularModule } from 'keycloak-angular';
+import { DonorSearchComponentComponent } from './donor-search-component/donor-search-component.component';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { KeycloakAngularModule } from 'keycloak-angular';
     AboutUsComponent,
     ContactUsComponent,
     MessageComponent,
-    FooterComponent
+    FooterComponent,
+    DonorSearchComponentComponent,
   ],
   imports: [
     BrowserModule,

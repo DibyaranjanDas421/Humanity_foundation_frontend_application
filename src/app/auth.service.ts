@@ -12,20 +12,27 @@ export class AuthService {
 
   constructor(private cookieService: CookieService) {}
 
-  // Save token and update loggedIn status
-  saveToken(token: string): void {
+  // Save token and userId, update loggedIn status
+  saveToken(token: string, userId: string): void {
     this.cookieService.set(this.tokenKey, token, { expires: 3, path: '/' });
+    this.cookieService.set('userId', userId, { expires: 3, path: '/' });  // You can store userId in a separate cookie if needed
     this.loggedInSubject.next(true); // Emit login status change
   }
 
   // Clear token and update loggedIn status
   clearToken(): void {
     this.cookieService.delete(this.tokenKey, '/');
+    this.cookieService.delete('userId', '/');  // Delete userId cookie as well if needed
     this.loggedInSubject.next(false); // Emit logout status change
   }
 
   // Check if user is logged in by checking the cookie
   isLoggedIn(): boolean {
     return this.cookieService.check(this.tokenKey);
+  }
+
+  // Retrieve the stored userId
+  getUserId(): string | null {
+    return this.cookieService.get('userId');
   }
 }

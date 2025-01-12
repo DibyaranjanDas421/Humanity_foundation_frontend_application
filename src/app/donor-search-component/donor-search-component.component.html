@@ -29,33 +29,42 @@
     </form>
   
     <!-- Donor List -->
-    <div *ngIf="donors && donors.length > 0" class="card">
-      <div class="card-body">
-        <h4 class="card-title">Donor List</h4>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Full Name</th>
-              <th>Blood Group</th>
-              <th>Mobile Number</th>
-              <th>Email</th>
-              <th>City</th>
-              <th>Availability</th>
-            </tr>
-          </thead>
-          <tbody>
+<div *ngIf="donors && donors.length > 0" class="card">
+    <div class="card-body">
+      <h4 class="card-title">Donor List</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Blood Group</th>
+            <th>Mobile Number</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Availability</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
             <tr *ngFor="let donor of donors">
-              <td>{{ donor?.fullName }}</td>
-              <td>{{ donor?.bloodGroup }}</td>
-              <td>{{ donor?.mobileNumber }}</td>
-              <td>{{ donor?.emailId }}</td>
-              <td>{{ donor?.city }}</td>
-              <td>{{ donor?.availabilityToDonateBlood ? 'Available' : 'Not Available' }}</td>
+                <td>{{ donor?.fullName }}</td>
+                <td>{{ donor?.bloodGroup }}</td>
+                <td>{{ donor?.mobileNumber }}</td>
+                <td>{{ donor?.emailId }}</td>
+                <td>{{ donor?.city }}</td>
+                <td>{{ donor?.availabilityToDonateBlood ? 'Available' : 'Not Available' }}</td>
+                <!-- Send Request Button -->
+                <td>
+                    <button (click)="sendRequest(donor.id)" [disabled]="!donor.availabilityToDonateBlood">
+                        Send Request
+                    </button>
+                </td>
             </tr>
-          </tbody>
-        </table>
-      </div>
+            
+        </tbody>
+      </table>
     </div>
+  </div>
+  
   
     <!-- No Donors Found -->
     <div *ngIf="donors && donors.length === 0 && !isLoading" class="alert alert-warning">

@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService
   ) {
-    // Initialize login form with userId and password fields
     this.loginForm = this.fb.group({
       userId: ['', Validators.required],
       password: ['', Validators.required]
@@ -34,66 +33,61 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
-   * Handles form submission, triggering login process if form is valid.
+   * Handles form submission, triggering the login process if the form is valid.
    */
   onSubmit(): void {
     if (this.loginForm.invalid) {
-      // Mark all form controls as touched to show validation errors
-      this.loginForm.markAllAsTouched();
+      this.loginForm.markAllAsTouched(); // Show validation errors
       return;
     }
 
-    // Set loading state and reset login error flag
-    this.isLoading = true;
-    this.loginError = false;
+    this.isLoading = true;  // Show loading state
+    this.loginError = false; // Reset previous login errors
 
-    // Retrieve credentials from the form
     const credentials: LoginCredentials = this.loginForm.value;
-
-    // Attempt to fetch access token and then log in
-    this.getAccessTokenAndLogin(credentials);
+    this.getAccessTokenAndLogin(credentials); // Proceed to get access token and log in
   }
 
   /**
-   * Fetches the access token and triggers login with provided credentials.
+   * Fetches the access token and triggers login with the provided credentials.
    */
   private getAccessTokenAndLogin(credentials: LoginCredentials): void {
     this.tokenService.getAccessToken().subscribe(
       (tokenResponse: TokenResponse) => {
-        const token = tokenResponse.access_token;
-        this.loginWithCredentials(credentials, token);
+        const token = tokenResponse.access_token; // Extract token
+        this.loginWithCredentials(credentials, token); // Proceed with login
       },
-      (error) => this.handleTokenError(error)
+      (error) => this.handleTokenError(error) // Handle token retrieval error
     );
   }
 
   /**
-   * Performs login using the provided credentials and access token.
+   * Logs the user in with the provided credentials and access token.
    */
   private loginWithCredentials(credentials: LoginCredentials, token: string): void {
     this.loginService.login(credentials, token).subscribe(
       (response) => {
-        this.isLoading = false;
-        this.handleLoginSuccess(response, token);
+        this.isLoading = false; // Hide loading spinner
+        this.handleLoginSuccess(response, token); // Handle successful login
       },
       (error) => {
-        this.isLoading = false;
-        this.handleLoginError(error);
+        this.isLoading = false; // Hide loading spinner
+        this.handleLoginError(error); // Handle failed login
       }
     );
   }
 
   /**
-   * Handles successful login by saving the token and userId, then navigating to home.
+   * Handles successful login, saves token and userId, and redirects to the home page.
    */
   private handleLoginSuccess(response: any, token: string): void {
     console.log('Login successful:', response);
 
-    // Assuming response contains userId, extract it
-    const userId = response.userId; 
+    // Assuming response contains userId, store it with the token
+    const { userId, id } = response;
 
-    // Save the token and userId using AuthService
-    this.authService.saveToken(token, userId);
+    // Save token and userId (and id) using AuthService
+    this.authService.saveToken(token, userId, id);
 
     // Display success message using SweetAlert
     Swal.fire({
@@ -102,13 +96,12 @@ export class LoginComponent implements OnInit {
       icon: 'success',
       confirmButtonText: 'OK'
     }).then(() => {
-      // Redirect to home page after successful login
-      this.router.navigate(['/home']);
+      this.router.navigate(['/home']); // Redirect to home page after successful login
     });
   }
 
   /**
-   * Handles failed login by displaying an error message.
+   * Handles failed login, displaying an error message to the user.
    */
   private handleLoginError(error: any): void {
     console.error('Login failed:', error);
@@ -117,7 +110,7 @@ export class LoginComponent implements OnInit {
     // Display error message using SweetAlert
     Swal.fire({
       title: 'Login Failed',
-      text: error?.message || 'Invalid username or password', // Customize based on backend error response
+      text: error?.message || 'Invalid username or password.',
       icon: 'error',
       confirmButtonText: 'Try Again'
     });

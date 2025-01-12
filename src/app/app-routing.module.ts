@@ -6,7 +6,8 @@ import { LoginComponent } from './login/login.component';
 import { BloodRequestComponent } from './blood-request/blood-request.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
-import {DonorSearchComponentComponent} from './donor-search-component/donor-search-component.component'
+import {DonorSearchComponentComponent} from './donor-search-component/donor-search-component.component';
+import {ReciverRequestComponent} from './reciver-request/reciver-request.component';
 
 import { AuthGuard } from './guards/auth.guard';  // Import AuthGuard
 import { NoAuthGuard } from './guards/no-auth.guard';  // Import NoAuthGuard
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
   { path: 'blood-request', component: BloodRequestComponent, canActivate: [AuthGuard] },
+  { path: 'receiver-request', component: ReciverRequestComponent, canActivate: [AuthGuard] },
 
   { path: 'donor-search', component: DonorSearchComponentComponent, canActivate: [AuthGuard] }, 
 

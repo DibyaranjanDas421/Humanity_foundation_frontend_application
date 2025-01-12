@@ -15,6 +15,7 @@ import { MessageComponent } from './message/message.component';
 import { FooterComponent } from './footer/footer.component';
 import { KeycloakAngularModule } from 'keycloak-angular';
 import { DonorSearchComponentComponent } from './donor-search-component/donor-search-component.component';
+import { ReciverRequestComponent } from './reciver-request/reciver-request.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { DonorSearchComponentComponent } from './donor-search-component/donor-se
     MessageComponent,
     FooterComponent,
     DonorSearchComponentComponent,
+    ReciverRequestComponent,
   ],
   imports: [
     BrowserModule,

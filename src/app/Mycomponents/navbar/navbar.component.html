@@ -76,6 +76,15 @@
         <li class="nav-item ms-3" *ngIf="isLoggedIn">
           <a class="nav-link" (click)="logout()" style="cursor: pointer;">Logout</a>
         </li>
+
+        <li class="nav-item ms-3" *ngIf="isLoggedIn && bloodRequestSubmitted">
+          <a class="nav-link" routerLink="/donor-search" routerLinkActive="active">Donor Search</a>
+        </li>
+
+        <li class="nav-item ms-3" *ngIf="isLoggedIn">
+          <a class="nav-link" routerLink="/receiver-request" routerLinkActive="active">Receiver Request</a>
+        </li>
+        
         
       </ul>
     </div>

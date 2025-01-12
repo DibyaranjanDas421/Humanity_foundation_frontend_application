@@ -182,6 +182,8 @@
 //     );
 //   }
 // }
+
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DonorService } from '../service/donor-service.service';
@@ -270,38 +272,50 @@ export class DonorSearchComponentComponent implements OnInit {
       }
     );
   }
-  sendRequest(receiverId: number): void {
-    const donorId = this.authService.getId();  // Ensure this returns the donor's ID (type string | null)
-    console.log('Donor ID:', donorId);  // Debugging donorId
-    console.log('Receiver ID:', receiverId);  // Debugging receiverId
-  
+  sendRequest(donorId: number): void {
+    const receiverId = this.authService.getId();  // This should be the logged-in user's ID (receiver)
+
+    console.log('Donor ID:', donorId);  // Donor ID from table (who is being contacted)
+    console.log('Receiver ID:', receiverId);  // Logged-in user's ID (who is sending the request)
+
     // Handle donorId being null
     if (!donorId) {
       Swal.fire({
         title: 'Error',
-        text: 'Donor ID is not available. Please log in again.',
+        text: 'Donor ID is not available. Please first submit a blood request.',
         icon: 'error',
         confirmButtonText: 'OK',
       });
       return;
     }
-  
-    // Convert donorId to number (or handle any type mismatch)
-    const donorIdNumber = Number(donorId);
-    
-    // Check if the conversion failed (i.e., donorId is not a valid number)
-    if (isNaN(donorIdNumber)) {
+
+    // Handle receiverId being null
+    if (receiverId === null) {
       Swal.fire({
         title: 'Error',
-        text: 'Invalid Donor ID. Please log in again.',
+        text: 'Receiver ID is not available. Please log in again.',
         icon: 'error',
         confirmButtonText: 'OK',
       });
       return;
     }
-  
+
+    // Convert receiverId to number
+    const receiverIdNumber = Number(receiverId);
+
+    // Check if the conversion failed (i.e., receiverId is not a valid number)
+    if (isNaN(receiverIdNumber)) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Invalid Receiver ID. Please log in again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
     // Check if donorId and receiverId are the same
-    if (donorIdNumber === receiverId) {
+    if (donorId === receiverIdNumber) {
       Swal.fire({
         title: 'Error',
         text: 'You cannot send a request to yourself.',
@@ -310,11 +324,11 @@ export class DonorSearchComponentComponent implements OnInit {
       });
       return;
     }
-  
+
     this.tokenService.getAccessToken().subscribe(
       (tokenResponse) => {
         const token = tokenResponse.access_token;
-  
+
         // Ensure token exists before making the request
         if (!token) {
           Swal.fire({
@@ -325,10 +339,10 @@ export class DonorSearchComponentComponent implements OnInit {
           });
           return;
         }
-  
+
         // Proceed with the request to send a donation request
         this.isLoading = true;
-        this.donorService.sendRequest(donorIdNumber, receiverId, token).subscribe(
+        this.donorService.sendRequest(receiverIdNumber, donorId, token).subscribe(
           () => {
             this.isLoading = false;
             Swal.fire({
@@ -361,8 +375,8 @@ export class DonorSearchComponentComponent implements OnInit {
         });
       }
     );
-  }
-  
+}
 
+  
 
 }

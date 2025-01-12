@@ -1,0 +1,86 @@
+/* Receiver Request Container */
+.receiver-request-container {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9f9;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 20px auto;
+    transition: transform 0.3s ease;
+  }
+  
+  .receiver-request-container:hover {
+    transform: translateY(-5px); /* Add slight hover effect */
+  }
+  
+  /* Title Styling */
+  .receiver-request-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  /* Receiver Info Container */
+  .receiver-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Info Title */
+  .receiver-info-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #4CAF50;
+    margin-bottom: 20px;
+  }
+  
+  /* Info Item Styling */
+  .receiver-info-item {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .receiver-info-item p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .receiver-info-item strong {
+    color: #333;
+    font-weight: 500;
+  }
+  
+  /* Receiver Image Styling */
+  .receiver-image {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .receiver-img {
+    max-width: 300px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .receiver-img:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Loading Container */
+  .loading-container {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+  }
+  
+  .loading-text {
+    font-style: italic;
+  }
+  

@@ -1,51 +1,97 @@
-<div *ngIf="receiverData?.length > 0; else loading" class="receiver-request-container">
-  <h1 class="receiver-request-title">Receiver Request</h1>
+<div *ngIf="receiverData?.length && receiverData.length > 0; else loading" class="receiver-request-container">
+  <h1 class="receiver-request-title">Receiver Requests</h1>
 
   <div class="receiver-info" *ngFor="let request of receiverData">
     <h2 class="receiver-info-title">Receiver Information</h2>
 
+    <!-- Basic Receiver Information -->
     <div class="receiver-info-item">
-      <p><strong>Full Name:</strong> {{ request?.userRequest?.receiver?.fullName }}</p>
+      <p><strong>Full Name:</strong> {{ request?.userRequest?.receiver?.fullName ?? 'N/A' }}</p>
     </div>
     <div class="receiver-info-item">
-      <p><strong>Blood Group:</strong> {{ request?.userRequest?.receiver?.bloodGroup }}</p>
+      <p><strong>Blood Group:</strong> {{ request?.userRequest?.receiver?.bloodGroup ?? 'N/A' }}</p>
     </div>
     <div class="receiver-info-item">
-      <p><strong>Mobile Number:</strong> {{ request?.userRequest?.receiver?.mobileNumber }}</p>
+      <p><strong>Mobile Number:</strong> {{ request?.userRequest?.receiver?.mobileNumber ?? 'N/A' }}</p>
     </div>
     <div class="receiver-info-item">
-      <p><strong>Email:</strong> {{ request?.userRequest?.receiver?.emailId }}</p>
+      <p><strong>Email:</strong> {{ request?.userRequest?.receiver?.emailId ?? 'N/A' }}</p>
     </div>
     <div class="receiver-info-item">
-      <p><strong>City:</strong> {{ request?.userRequest?.receiver?.city }}</p>
+      <p><strong>City:</strong> {{ request?.userRequest?.receiver?.city ?? 'N/A' }}</p>
     </div>
     <div class="receiver-info-item">
-      <p><strong>State:</strong> {{ request?.userRequest?.receiver?.state }}</p>
+      <p><strong>State:</strong> {{ request?.userRequest?.receiver?.state ?? 'N/A' }}</p>
     </div>
     <div class="receiver-info-item">
-      <p><strong>Country:</strong> {{ request?.userRequest?.receiver?.country }}</p>
-    </div>
-    
-    <!-- Displaying Hospital Name -->
-    <div class="receiver-info-item">
-      <p><strong>Hospital Name:</strong> {{ request?.userRequest?.hospitalName }}</p>
+      <p><strong>Country:</strong> {{ request?.userRequest?.receiver?.country ?? 'N/A' }}</p>
     </div>
 
-    <div class="receiver-image">
-      <p><strong>Receiver Image:</strong></p>
-      <img *ngIf="request?.userRequest?.fileUrl" [src]="request?.userRequest?.fileUrl" alt="Receiver Image" class="receiver-img" />
+    <!-- Hospital Information -->
+    <div class="receiver-info-item">
+      <p><strong>Hospital Name:</strong> {{ request?.hospitalName ?? 'N/A' }}</p>
     </div>
-    
+
+    <!-- Receiver Image -->
+    <div class="receiver-image" *ngIf="request?.userRequest?.fileUrl">
+      <p><strong>Receiver Image:</strong></p>
+      <img [src]="request?.userRequest?.fileUrl" alt="Receiver Image" class="receiver-img" />
+    </div>
+
     <!-- Accept/Reject Buttons -->
     <div class="response-buttons">
-      <button (click)="respondToRequest(request?.id, 'ACCEPT')" class="btn accept-btn">Accept</button>
-      <button (click)="respondToRequest(request?.id, 'REJECT')" class="btn reject-btn">Reject</button>
+      <button (click)="respondToRequest(request?.id ?? 0, 'ACCEPT')" class="btn accept-btn">
+        Accept
+      </button>
+      <button (click)="respondToRequest(request?.id ?? 0, 'REJECT')" class="btn reject-btn">
+        Reject
+      </button>
     </div>
   </div>
 </div>
 
+<!-- Loading State -->
 <ng-template #loading>
   <div class="loading-container">
     <p class="loading-text">Loading receiver request data...</p>
   </div>
 </ng-template>
+
+<div class="container mt-4">
+  <h3 class="text-primary mb-3">Accepted Donor Requests</h3>
+
+  <table class="table table-bordered table-striped" *ngIf="acceptedDonors.length > 0">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Blood Group</th>
+        <th>City</th>
+        <th>District</th>
+        <th>State</th>
+        <th>Country</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let donor of acceptedDonors; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ donor.donorFullName }}</td>
+        <td>{{ donor.donorEmail }}</td>
+        <td>{{ donor.donorMobile }}</td>
+        <td>{{ donor.donorBloodGroup }}</td>
+        <td>{{ donor.donorCity }}</td>
+        <td>{{ donor.donorDistrict }}</td>
+        <td>{{ donor.donorState }}</td>
+        <td>{{ donor.donorCountry }}</td>
+        <td><span class="badge bg-success">{{ donor.status }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="acceptedDonors.length === 0" class="alert alert-info">
+    No accepted donor requests found.
+  </div>
+</div>

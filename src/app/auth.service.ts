@@ -12,39 +12,64 @@ export class AuthService {
 
   constructor(private cookieService: CookieService) {}
 
-  // Save token, userId, and user id in cookies, update loggedIn status
-  saveToken(token: string, userId: string, id: number): void {
-    this.cookieService.set(this.tokenKey, token, { expires: 3, path: '/' });
-    this.cookieService.set('userId', userId, { expires: 3, path: '/' });
-    this.cookieService.set('id', id.toString(), { expires: 3, path: '/' });
-    this.loggedInSubject.next(true);
+  saveToken(token: string, userId: any, id: any): void {
+    if (!token) {
+      console.error('❌ No token provided, cannot save!');
+      return;
+    }
+  
+    console.log('💾 Storing Token:', token);
+    console.log('💾 Storing User ID:', userId);
+    console.log('💾 Storing Id:', id?.toString()); // ✅ Fix: Log the actual ID instead of userId
+  
+    localStorage.setItem('jwtToken', token);
+    localStorage.setItem('userId', userId?.toString() || 'unknownUser'); // ✅ Safely convert userId to string
+    localStorage.setItem('userIdNumber', id !== null && id !== undefined ? id.toString() : '0'); // ✅ Handle null/undefined for id
   }
+  
+  
 
-  // Clear token, userId, and id cookies, update loggedIn status
-  clearToken(): void {
-    this.cookieService.delete(this.tokenKey, '/');
-    this.cookieService.delete('userId', '/');
-    this.cookieService.delete('id', '/');
-    this.loggedInSubject.next(false);
-  }
+// ✅ Check if user is logged in by checking localStorage
+isLoggedIn(): boolean {
+  return !!localStorage.getItem('jwtToken');
+}
 
-  // Check if user is logged in by checking the cookie
-  isLoggedIn(): boolean {
-    return this.cookieService.check(this.tokenKey);
-  }
+// ✅ Retrieve the stored userId from localStorage
+getUserId(): string | null {
+  return localStorage.getItem('userId');
+}
 
-  // Retrieve the stored userId
-  getUserId(): string | null {
-    return this.cookieService.get('userId');
-  }
+// ✅ Retrieve the stored userId's number from localStorage
+getId(): string | null {
+  return localStorage.getItem('userIdNumber');
+}
 
-  // Retrieve the stored userId's id
-  getId(): string | null {
-    return this.cookieService.get('id');
-  }
+// ✅ Get the token from localStorage
+getToken(): string | null {
+  return localStorage.getItem('jwtToken');
+}
 
-  // Get the token from the cookie
-  getToken(): string | null {
-    return this.cookieService.get(this.tokenKey);
-  }
+// Add this in your AuthService
+saveUserRequestId(requestId: number): void {
+  localStorage.setItem('user_request_id', requestId.toString());
+}
+
+getUserRequestId(): number | null {
+  const id = localStorage.getItem('user_request_id');
+  return id ? Number(id) : null;
+}
+
+clearUserRequestId(): void {
+  localStorage.removeItem('user_request_id');
+}
+
+
+// ✅ Clear token, userId, and id from localStorage
+clearToken(): void {
+  localStorage.removeItem('jwtToken');
+  localStorage.removeItem('userId');
+  localStorage.removeItem('userIdNumber');
+  this.loggedInSubject.next(false);
+}
+
 }

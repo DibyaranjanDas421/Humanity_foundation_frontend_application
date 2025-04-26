@@ -1,0 +1,23 @@
+
+<div *ngIf="profileData; else loading">
+  <h2>Profile Details</h2>
+  <ul>
+    <li><strong>ID:</strong> {{ profileData.id }}</li>
+    <li><strong>Full Name:</strong> {{ profileData.fullName }}</li>
+    <li><strong>Blood Group:</strong> {{ profileData.bloodGroup }}</li>
+    <li><strong>Mobile Number:</strong> {{ profileData.mobileNumber }}</li>
+    <li><strong>Country:</strong> {{ profileData.country }}</li>
+    <li><strong>State:</strong> {{ profileData.state }}</li>
+    <li><strong>District:</strong> {{ profileData.district }}</li>
+    <li><strong>City:</strong> {{ profileData.city }}</li>
+    <li><strong>Email ID:</strong> {{ profileData.emailId }}</li>
+    <li><strong>User ID:</strong> {{ profileData.userId }}</li>
+    <li><strong>Available to Donate Blood:</strong> 
+      {{ profileData.availabilityToDonateBlood ? 'Yes' : 'No' }}
+    </li>
+  </ul>
+</div>
+
+<ng-template #loading>
+  <p>Loading profile data...</p>
+</ng-template>

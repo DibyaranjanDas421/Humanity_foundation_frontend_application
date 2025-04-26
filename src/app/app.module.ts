@@ -16,6 +16,8 @@ import { FooterComponent } from './footer/footer.component';
 import { KeycloakAngularModule } from 'keycloak-angular';
 import { DonorSearchComponentComponent } from './donor-search-component/donor-search-component.component';
 import { ReciverRequestComponent } from './reciver-request/reciver-request.component';
+import { ProfileComponent } from './profile/profile.component';
+import { CurrentBloodRequestComponent } from './current-blood-request/current-blood-request.component';
 
 
 @NgModule({
@@ -32,6 +34,8 @@ import { ReciverRequestComponent } from './reciver-request/reciver-request.compo
     FooterComponent,
     DonorSearchComponentComponent,
     ReciverRequestComponent,
+    ProfileComponent,
+    CurrentBloodRequestComponent,
   ],
   imports: [
     BrowserModule,

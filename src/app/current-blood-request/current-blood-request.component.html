@@ -1,0 +1,21 @@
+<div class="container" *ngIf="currentBloodRequestData; else noData">
+    <h2>Current Blood Request</h2>
+    <div class="card">
+      <p><strong>User ID:</strong> {{ currentBloodRequestData.userId }}</p>
+      <p><strong>Full Name:</strong> {{ currentBloodRequestData.fullName }}</p>
+      <p><strong>Blood Group:</strong> {{ currentBloodRequestData.bloodGroup }}</p>
+      <p><strong>Mobile Number:</strong> {{ currentBloodRequestData.mobileNumber }}</p>
+      <p><strong>Country:</strong> {{ currentBloodRequestData.country }}</p>
+      <p><strong>State:</strong> {{ currentBloodRequestData.state }}</p>
+      <p><strong>District:</strong> {{ currentBloodRequestData.district }}</p>
+      <p><strong>City:</strong> {{ currentBloodRequestData.city }}</p>
+      <p><strong>Hospital Name:</strong> {{ currentBloodRequestData.hospitalName }}</p>
+  
+      <button (click)="deleteRequest()" class="btn btn-danger mt-3">Delete Request</button>
+    </div>
+  </div>
+  
+  <ng-template #noData>
+    <p>No current blood request found.</p>
+  </ng-template>
+  

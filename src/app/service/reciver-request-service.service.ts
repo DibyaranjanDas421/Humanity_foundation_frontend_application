@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TokenService } from '../token-service.service';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -12,68 +11,67 @@ export class ReciverRequestService {
 
   constructor(
     private http: HttpClient,
-    private tokenService: TokenService,
     private cookieService: CookieService
   ) {}
 
-  /**
-   * Fetch receiver request data based on donorId
-   * @param donorId - Donor ID to fetch receiver request data for
-   * @returns Observable<any>
-   */
-  getReceiverRequest(donorId: string): Observable<any> {
-    return new Observable((observer) => {
-      this.tokenService.getAccessToken().subscribe(
-        (response) => {
-          const token = response.access_token;
+  // /**
+  //  * Fetch receiver request data based on donorId
+  //  * @param donorId - Donor ID to fetch receiver request data for
+  //  * @returns Observable<any>
+  //  */
+  // getReceiverRequest(donorId: string): Observable<any> {
+  //   return new Observable((observer) => {
+  //     this.tokenService.getAccessToken().subscribe(
+  //       (response) => {
+  //         const token = response.access_token;
 
-          const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-          this.http.get(`${this.apiUrl}${donorId}`, { headers }).subscribe(
-            (apiResponse) => {
-              observer.next(apiResponse);
-              observer.complete();
-            },
-            (error) => {
-              observer.error(error);
-            }
-          );
-        },
-        (error) => {
-          observer.error(error);
-        }
-      );
-    });
-  }
+  //         this.http.get(`${this.apiUrl}${donorId}`, { headers }).subscribe(
+  //           (apiResponse) => {
+  //             observer.next(apiResponse);
+  //             observer.complete();
+  //           },
+  //           (error) => {
+  //             observer.error(error);
+  //           }
+  //         );
+  //       },
+  //       (error) => {
+  //         observer.error(error);
+  //       }
+  //     );
+  //   });
+  // }
 
-  respondToRequest(donorId: number, donorReceiverStatusId: number, response: string): Observable<any> {
-    return new Observable((observer) => {
-      this.tokenService.getAccessToken().subscribe(
-        (responseData) => {
-          const token = responseData.access_token;
+  // respondToRequest(donorId: number, donorReceiverStatusId: number, response: string): Observable<any> {
+  //   return new Observable((observer) => {
+  //     this.tokenService.getAccessToken().subscribe(
+  //       (responseData) => {
+  //         const token = responseData.access_token;
 
-          const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-          const apiUrl = `http://localhost:8080/donors/${donorId}/respond/${donorReceiverStatusId}`;
+  //         const apiUrl = `http://localhost:8080/donors/${donorId}/respond/${donorReceiverStatusId}`;
 
-          const requestBody = { response };
+  //         const requestBody = { response };
 
-          console.log(response);
+  //         console.log(response);
 
-          this.http.put(apiUrl, requestBody, { headers }).subscribe(
-            (apiResponse) => {
-              observer.next(apiResponse);
-              observer.complete();
-            },
-            (error) => {
-              observer.error(error);
-            }
-          );
-        },
-        (error) => {
-          observer.error(error);
-        }
-      );
-    });
-  }
+  //         this.http.put(apiUrl, requestBody, { headers }).subscribe(
+  //           (apiResponse) => {
+  //             observer.next(apiResponse);
+  //             observer.complete();
+  //           },
+  //           (error) => {
+  //             observer.error(error);
+  //           }
+  //         );
+  //       },
+  //       (error) => {
+  //         observer.error(error);
+  //       }
+  //     );
+  //   });
+  // }
 }

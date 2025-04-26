@@ -8,6 +8,8 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import {DonorSearchComponentComponent} from './donor-search-component/donor-search-component.component';
 import {ReciverRequestComponent} from './reciver-request/reciver-request.component';
+import {ProfileComponent}  from'./profile/profile.component';
+import { CurrentBloodRequestComponent } from './current-blood-request/current-blood-request.component';
 
 import { AuthGuard } from './guards/auth.guard';  // Import AuthGuard
 import { NoAuthGuard } from './guards/no-auth.guard';  // Import NoAuthGuard
@@ -33,6 +35,9 @@ const routes: Routes = [
   // Other public routes
   { path: 'about-us', component: AboutUsComponent },
   { path: 'contact-us', component: ContactUsComponent },
+  {path:'profile',component:ProfileComponent},
+  {path:'CurrentBloodRequest',component:CurrentBloodRequestComponent}
+
 ];
 
 @NgModule({

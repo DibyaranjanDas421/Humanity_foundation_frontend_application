@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService, LoginCredentials } from '../service/login-service.service';
-import { TokenService } from '../token-service.service';
-import { TokenResponse } from '../models/token-response.model';
-import Swal from 'sweetalert2';
+import { JwtService } from '../service/jwt.service';
 import { AuthService } from '../auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -19,116 +17,121 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private loginService: LoginService,
-    private tokenService: TokenService,
-    private router: Router,
-    private authService: AuthService
+    private jwtService: JwtService,
+    private authService: AuthService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
-      userId: ['', Validators.required],
-      password: ['', Validators.required]
+      userId: ['', [Validators.required, Validators.minLength(3)]], // ✅ Added validation
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   ngOnInit(): void {}
 
   /**
-   * Handles form submission, triggering the login process if the form is valid.
+   * Handles form submission and login request.
    */
   onSubmit(): void {
     if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched(); // Show validation errors
+      this.loginForm.markAllAsTouched();
       return;
     }
 
-    this.isLoading = true;  // Show loading state
-    this.loginError = false; // Reset previous login errors
+    this.isLoading = true;
+    this.loginError = false;
 
-    const credentials: LoginCredentials = this.loginForm.value;
-    this.getAccessTokenAndLogin(credentials); // Proceed to get access token and log in
+    const credentials = {
+      userId: this.loginForm.value.userId.trim(), // ✅ Trim spaces
+      password: this.loginForm.value.password.trim()
+    };
+
+    console.log('📤 Sending login request:', credentials); // ✅ Debugging
+
+    this.login(credentials);
   }
 
   /**
-   * Fetches the access token and triggers login with the provided credentials.
+   * Calls the login API and processes the response.
    */
-  private getAccessTokenAndLogin(credentials: LoginCredentials): void {
-    this.tokenService.getAccessToken().subscribe(
-      (tokenResponse: TokenResponse) => {
-        const token = tokenResponse.access_token; // Extract token
-        this.loginWithCredentials(credentials, token); // Proceed with login
-      },
-      (error) => this.handleTokenError(error) // Handle token retrieval error
-    );
-  }
-
-  /**
-   * Logs the user in with the provided credentials and access token.
-   */
-  private loginWithCredentials(credentials: LoginCredentials, token: string): void {
-    this.loginService.login(credentials, token).subscribe(
-      (response) => {
-        this.isLoading = false; // Hide loading spinner
-        this.handleLoginSuccess(response, token); // Handle successful login
-      },
-      (error) => {
-        this.isLoading = false; // Hide loading spinner
-        this.handleLoginError(error); // Handle failed login
-      }
-    );
-  }
-
-  /**
-   * Handles successful login, saves token and userId, and redirects to the home page.
-   */
-  private handleLoginSuccess(response: any, token: string): void {
-    console.log('Login successful:', response);
-
-    // Assuming response contains userId, store it with the token
-    const { userId, id } = response;
-
-    // Save token and userId (and id) using AuthService
-    this.authService.saveToken(token, userId, id);
-
-    // Display success message using SweetAlert
-    Swal.fire({
-      title: 'Login Successful',
-      text: response.message || 'Successfully logged in.',
-      icon: 'success',
-      confirmButtonText: 'OK'
-    }).then(() => {
-      this.router.navigate(['/home']); // Redirect to home page after successful login
+  private login(credentials: any): void {
+    this.jwtService.login(credentials).subscribe({
+      next: (response) => this.handleLoginSuccess(response),
+      error: (error) => this.handleLoginError(error),
+      complete: () => (this.isLoading = false)
     });
   }
 
   /**
-   * Handles failed login, displaying an error message to the user.
+   * Handles a successful login response.
+   */
+//   private handleLoginSuccess(response: any): void {
+//     console.log('✅ Login successful:', response);
+
+//     const token = response.jwtToken; // ✅ Ensure this matches API response
+
+//     if (!token) {
+//         console.warn('⚠ No token found in response:', response);
+//         return;
+//     }
+
+//     console.log('🔑 JWT Token:', token);
+
+//     // ✅ Extract userId and id safely (if available)
+//     const userId = response.userId || "unknownUser"; // Default value if missing
+//     const id = response.id || "0"; // Default value if missing
+
+//     this.authService.saveToken(token, userId, id); // ✅ Prevents undefined errors
+
+//     Swal.fire({
+//         title: 'Login Successful',
+//         text: response.message || 'Successfully logged in.',
+//         icon: 'success',
+//         confirmButtonText: 'OK'
+//     }).then(() => {
+//         this.router.navigate(['/home']);
+//     });
+// }
+private handleLoginSuccess(response: any): void {
+  console.log('✅ Login successful:', response);
+
+  const token = response.jwtToken;
+  if (!token) {
+    console.warn('⚠ No token found in response:', response);
+    return;
+  }
+
+  const userId = response.userId || "unknownUser";
+  const id = response.id || "0";
+
+  this.authService.saveToken(token, userId, id);
+
+  Swal.fire({
+    title: 'Login Successful',
+    text: response.message || 'Successfully logged in.',
+    icon: 'success',
+    confirmButtonText: 'OK'
+  }).then(() => {
+    this.router.navigate(['/home']).then(() => {
+      // ✅ Force full app reload
+      window.location.reload();
+    });
+  });
+}
+
+
+  /**
+   * Handles a failed login attempt.
    */
   private handleLoginError(error: any): void {
-    console.error('Login failed:', error);
+    console.error('❌ Login failed:', error);
     this.loginError = true;
 
-    // Display error message using SweetAlert
     Swal.fire({
       title: 'Login Failed',
-      text: error?.message || 'Invalid username or password.',
+      text: error?.error?.message || 'Invalid username or password.',
       icon: 'error',
       confirmButtonText: 'Try Again'
-    });
-  }
-
-  /**
-   * Handles errors related to fetching the token, showing a message to the user.
-   */
-  private handleTokenError(error: any): void {
-    this.isLoading = false;
-    console.error('Failed to retrieve token:', error);
-
-    // Display token retrieval error using SweetAlert
-    Swal.fire({
-      title: 'Token Error',
-      text: 'Failed to retrieve access token. Please try again later.',
-      icon: 'error',
-      confirmButtonText: 'OK'
     });
   }
 }

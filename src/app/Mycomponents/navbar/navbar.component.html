@@ -73,9 +73,6 @@
           <a class="nav-link" routerLink="/contact-us" routerLinkActive="active">Contact Us</a>
         </li>
 
-        <li class="nav-item ms-3" *ngIf="isLoggedIn">
-          <a class="nav-link" (click)="logout()" style="cursor: pointer;">Logout</a>
-        </li>
 
         <li class="nav-item ms-3" *ngIf="isLoggedIn && bloodRequestSubmitted">
           <a class="nav-link" routerLink="/donor-search" routerLinkActive="active">Donor Search</a>
@@ -85,6 +82,24 @@
           <a class="nav-link" routerLink="/receiver-request" routerLinkActive="active">Receiver Request</a>
         </li>
         
+        <li class="nav-item ms-3" *ngIf="isLoggedIn">
+          <a class="nav-link" routerLink="/CurrentBloodRequest" routerLinkActive="active">CurrentBloodRequest</a>
+        </li>
+       
+
+        <!-- Profile dropdown only visible when logged in -->
+<li class="nav-item dropdown ms-3" *ngIf="isLoggedIn">
+  <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <img src="assets/profile.png" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%;">
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+    <li><a class="dropdown-item" routerLink="/profile">View Profile</a></li>
+  
+    <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Logout</a></li>
+  </ul>
+</li>
+
+        
         
       </ul>
     </div>
@@ -93,4 +108,6 @@
       <img src="/assets/blood-drop-removebg-preview.png" style="height: 3rem; width: 3rem;">
     </h4>
   </div>
+  
+
 </nav>

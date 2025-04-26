@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ReciverRequestService } from '../service/reciver-request-service.service';
+import { JwtService } from '../service/jwt.service';
 import { CookieService } from 'ngx-cookie-service';
-import { TokenService } from '../token-service.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../auth.service';
@@ -12,103 +11,140 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./reciver-request.component.scss'],
 })
 export class ReciverRequestComponent implements OnInit {
-  donorId: string | null = '';
-  receiverData: any = null;
+  donorId: string | null = null;
+  donorDetails: any = null;
+  receiverData: any[] = []; // ✅ Initialize as an empty array
 
   constructor(
-    private reciverRequestService: ReciverRequestService,
+    private jwtService: JwtService,
     private cookieService: CookieService,
-    private tokenService: TokenService,
     private router: Router,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.initializeDonorId();
+    this.fetchAcceptedRequests();
+  }
+
+  /**
+   * Initialize donor ID using AuthService
+   */
+  private initializeDonorId(): void {
     this.donorId = this.authService.getId();
+
     if (this.donorId) {
-      this.fetchReceiverRequestData();
+      this.fetchDonorDetails(Number(this.donorId));
     } else {
-      Swal.fire({
-        title: 'Error',
-        text: 'Donor ID is missing!',
-        icon: 'error',
-        confirmButtonText: 'OK',
-      });
+      this.showError('Donor ID is missing!');
     }
   }
 
   /**
-   * Fetch receiver request data based on donorId
+   * Fetch donor details and receiver requests
    */
-  fetchReceiverRequestData() {
+  private fetchDonorDetails(donorId: number): void {
+    this.jwtService.getDonorPendingRequests(donorId).subscribe({
+      next: (response) => {
+        this.donorDetails = response;
+        this.receiverData = Array.isArray(response) ? response : [];
+        console.log('Receiver Data:', this.receiverData);
+      },
+      error: () => this.showError('Failed to fetch donor details. Please try again later.'),
+    });
+  }
+
+  /**
+   * Send request from donor to receiver
+   */
+  sendRequest(receiverId: number): void {
     if (!this.donorId) {
+      this.showError('Donor ID is missing!');
       return;
     }
 
-    this.reciverRequestService.getReceiverRequest(this.donorId).subscribe(
-      (response) => {
-        if (Array.isArray(response) && response.length > 0) {
-          this.receiverData = response;
-        } else {
-          Swal.fire({
-            title: 'Error',
-            text: 'No receiver data found!',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        }
+    this.jwtService.sendRequest(receiverId, Number(this.donorId)).subscribe({
+      next: () => {
+        this.showSuccess('Request sent successfully!');
+        this.refreshReceiverData();
       },
-      (error) => {
-        Swal.fire({
-          title: 'Error',
-          text: 'There was an issue fetching the data.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
-      }
-    );
+      error: () => this.showError('Failed to send the request. Please try again later.'),
+    });
   }
-  
-  respondToRequest(donorReceiverStatusId: number, action: string): void {
-    console.log('Action:', action); // Log the action before sending
-  
-    // Ensure the response is in uppercase form before sending
-    const response = action === 'ACCEPT' ? 'ACCEPT' : 'REJECT';
-  
-    // Check if donorId and reciverRequestService are valid (non-null)
+
+  /**
+   * Respond to a receiver request (Accept/Reject)
+   */
+  respondToRequest(donorReceiverStatusId: number, action: 'ACCEPT' | 'REJECT'): void {
     if (!this.donorId) {
-      console.error('Donor ID is missing.');
-      return; // Early exit if donorId is invalid
+      this.showError('Donor ID is missing!');
+      return;
     }
   
-    if (!this.reciverRequestService) {
-      console.error('Receiver Request Service is missing.');
-      return; // Early exit if reciverRequestService is invalid
-    }
-  
-    // Now proceed with making the PUT request to the backend
-    this.reciverRequestService.respondToRequest(+this.donorId, donorReceiverStatusId, response).subscribe(
-      (result) => {
-        Swal.fire({
-          title: 'Success',
-          text: `Request has been ${response.toLowerCase()} successfully.`,
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-  
-        // Refresh the receiver data to reflect the updated state
-        this.fetchReceiverRequestData();
+    this.jwtService.respondToRequest(Number(this.donorId), donorReceiverStatusId, action).subscribe({
+      next: () => {
+        this.showSuccess(`Request ${action.toLowerCase()}ed successfully.`);
+        this.refreshReceiverData();
       },
-      (error) => {
-        console.error('Error responding to request:', error);
-        Swal.fire({
-          title: 'Error',
-          text: 'Failed to respond to the request. Please try again.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
-      }
-    );
+      error: (err) => {
+        console.error('API Error:', err);
+        this.showError('Failed to respond to the request. Please try again later.');
+      },
+    });
   }
   
+
+  /**
+   * Refresh receiver data after an action
+   */
+  private refreshReceiverData(): void {
+    if (this.donorId) {
+      this.fetchDonorDetails(Number(this.donorId));
+    }
+  }
+
+  /**
+   * Display success alert
+   */
+  private showSuccess(message: string): void {
+    Swal.fire({
+      title: 'Success',
+      text: message,
+      icon: 'success',
+      confirmButtonText: 'OK',
+    });
+  }
+
+  /**
+   * Display error alert
+   */
+  private showError(message: string): void {
+    Swal.fire({
+      title: 'Error',
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+  }
+  acceptedDonors: any[] = []; // ✅ for storing the response
+
+
+private fetchAcceptedRequests(): void {
+  const receiverId = this.authService.getId(); // assumes receiver is logged in
+
+  if (receiverId) {
+    this.jwtService.getAcceptedDonorRequests(Number(receiverId)).subscribe({
+      next: (response) => {
+        this.acceptedDonors = Array.isArray(response) ? response : [];
+        console.log('Accepted Donors:', this.acceptedDonors);
+      },
+      error: () => {
+        this.showError('Failed to fetch accepted donor data.');
+      }
+    });
+  } else {
+    this.showError('Receiver ID not found!');
+  }
+}
+
 }
